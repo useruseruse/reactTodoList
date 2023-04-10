@@ -1,26 +1,27 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateItem } from "../modules/todoReducer";
 
 const TodoItem = (props) => {
     const [text, setText] = useState(props.text);
     const [editing, setEditing] = useState(false);
-
+    
+    const dispatch = useDispatch();
 
     const onClickEditing = () =>{
-         setEditing(!editing)
+        if(editing){
+            dispatch(updateItem(text, props.id));
+        } setEditing(!editing);
     }
-
-    const onChangeText = (e) => setText(e.target.value);
-
-    const onClickDelete = () => {
-        props.deleteItem(text)
-    }
+    
     return (
+        
         <div>
+            <input type="checkbox"></input>
             <div>
             { editing? (
             <div>
-            <input type="checkbox"></input>
-            <input onChange={onChangeText} ></input>
+            <input onChange={e => setText(e.target.value)} ></input>
             <button onClick={onClickEditing}>수정 끝내기</button>
             </div>
             )
@@ -28,13 +29,13 @@ const TodoItem = (props) => {
             <div>
             <div>{text}</div>
             <button onClick={onClickEditing}>수정하기</button>
-            <button onClick={onClickDelete}>삭제하기</button>
+            <button onClick={props.onClickDelete}>삭제하기</button>
             </div>
             )
             }
             </div>
-        </div>
-    );
+        </div>)
+
 }
 
 export default TodoItem;
